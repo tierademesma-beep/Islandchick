@@ -309,6 +309,26 @@
     margin-top: 3px;
   }
 
+  /* ---------- Monthly notes page ---------- */
+  .notes-card { gap: 18px; }
+  .notes-head { display: flex; align-items: center; gap: 14px; }
+  .notes-head .titles h2 { font-size: 1.35rem; font-weight: 700; color: var(--ink); }
+  .notes-head .titles .sm { font-style: italic; color: var(--lagoon); font-weight: 500; font-size: 0.9rem; margin-top: 2px; }
+  .notes-page-area {
+    min-height: 460px;
+    outline: none;
+    font-size: 0.95rem;
+    line-height: 32px;
+    color: var(--ink);
+    padding-top: 2px;
+    background-image: repeating-linear-gradient(to bottom, transparent, transparent 30px, var(--line) 30px, var(--line) 31px);
+  }
+  .notes-page-area:empty:before {
+    content: attr(data-placeholder);
+    color: var(--ink-soft);
+    opacity: 0.7;
+  }
+
   /* ---------- Glossary / footer ---------- */
   .glossary {
     margin-top: 38px;
@@ -352,6 +372,7 @@
     .day-box, .goals, .fact { background: #fff !important; border-color: #ccc; }
     .day-box.sunday { background: #fdf1e8 !important; }
     .badge { background: #eee; }
+    .notes-page-area { background-image: repeating-linear-gradient(to bottom, transparent, transparent 30px, #ccc 30px, #ccc 31px); }
   }
 </style>
 
@@ -372,6 +393,7 @@
     </p>
     <div class="hero-note">
       <div><span>&#9998;&#65039;</span><span>Click into any day or the goals box to type notes &mdash; they&#8217;re saved automatically in this browser.</span></div>
+      <div><span>&#128220;</span><span>Each month ends with a full lined <b>Notes</b> page for longer thoughts, lists, or planning.</span></div>
       <div><span>&#9728;&#65039;</span><span><b>Aso S&#257;</b> (Sunday) is traditionally a sacred day of rest in Samoa &mdash; marked in coral throughout.</span></div>
     </div>
     <button class="print-btn" type="button" id="printBtn">&#128424;&#65039; Print this planner</button>
@@ -686,6 +708,33 @@
     return wrap;
   }
 
+  function buildNotesPage(data, index) {
+    var card = document.createElement("article");
+    card.className = "card notes-card";
+
+    var head = document.createElement("div");
+    head.className = "notes-head";
+    head.innerHTML =
+      '<div class="badge"><svg><use href="#icon-' + data.theme + '"></use></svg></div>' +
+      '<div class="titles"><h2>' + data.en + ' Notes</h2><div class="sm">Fa&#8217;amaumauga o ' + data.sm + '</div></div>';
+    card.appendChild(head);
+
+    var area = document.createElement("div");
+    area.className = "notes-page-area";
+    area.contentEditable = "true";
+    area.setAttribute("role", "textbox");
+    area.setAttribute("aria-multiline", "true");
+    area.setAttribute("aria-label", data.en + " notes page");
+    area.setAttribute("data-placeholder", "Tusitusi mai ni manatu, fuafuaga, po’o ni mea e mana’omia... / Jot down thoughts, plans, or anything to remember...");
+    var key = "notes-page:" + index;
+    var saved = safeGet(key);
+    if (saved) area.textContent = saved;
+    area.addEventListener("input", function () { safeSet(key, this.textContent); });
+    card.appendChild(area);
+
+    return card;
+  }
+
   function buildMonthCard(data, index, holidayMap) {
     var card = document.createElement("article");
     card.className = "card";
@@ -721,6 +770,7 @@
     var grid = document.getElementById("monthGrid");
     MONTHS.forEach(function (m, i) {
       grid.appendChild(buildMonthCard(m, i, holidayMap));
+      grid.appendChild(buildNotesPage(m, i));
     });
     var printBtn = document.getElementById("printBtn");
     if (printBtn) printBtn.addEventListener("click", function () { window.print(); });
