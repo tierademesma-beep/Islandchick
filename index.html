@@ -99,7 +99,7 @@
     margin-top: 4px;
   }
   .hero p.lede {
-    max-width: 60ch;
+    max-width: 62ch;
     margin-top: 18px;
     line-height: 1.6;
     color: #dcf0ec;
@@ -107,6 +107,11 @@
   }
   .hero-note {
     margin-top: 22px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .hero-note div {
     display: inline-flex;
     gap: 10px;
     align-items: flex-start;
@@ -114,11 +119,26 @@
     border: 1px solid rgba(255,255,255,0.18);
     border-radius: 14px;
     padding: 12px 16px;
-    font-size: 0.86rem;
+    font-size: 0.85rem;
     line-height: 1.5;
     color: #eefaf6;
+    max-width: 420px;
   }
   .hero-note b { color: var(--coral-soft); }
+
+  .print-btn {
+    margin-top: 22px;
+    background: var(--coral);
+    color: #fff8f2;
+    border: none;
+    border-radius: 999px;
+    padding: 11px 22px;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.86rem;
+    cursor: pointer;
+  }
+  .print-btn:hover { background: #d55420; }
 
   /* ---------- Legend ---------- */
   .legend {
@@ -139,12 +159,19 @@
     color: var(--ink-soft);
   }
   .legend-item svg { width: 26px; height: 26px; }
+  .legend-item .dot {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--coral-soft);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .legend-item .dot span { width: 9px; height: 9px; border-radius: 50%; background: var(--coral); display: block; }
   .legend-item b { color: var(--ink); font-weight: 600; }
 
   /* ---------- Month grid ---------- */
   .month-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(540px, 1fr));
     gap: 22px;
     margin-top: 30px;
   }
@@ -156,7 +183,7 @@
     padding: 22px 22px 20px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
   }
 
   .card-head { display: flex; align-items: center; gap: 14px; }
@@ -182,28 +209,90 @@
   }
   .fact b { color: var(--ink); }
 
-  table.cal { width: 100%; border-collapse: collapse; table-layout: fixed; }
-  table.cal th {
-    font-weight: 600;
-    font-size: 0.68rem;
-    color: var(--ink-soft);
-    padding-bottom: 6px;
-    text-align: center;
+  /* ---------- Goals box ---------- */
+  .goals {
+    background: var(--bg);
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    padding: 12px 14px;
   }
-  table.cal th .sm-day { display: block; color: var(--lagoon); font-weight: 700; letter-spacing: 0.02em; }
-  table.cal th .en-day { display: block; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.62rem; opacity: 0.85; }
-  table.cal td {
-    text-align: center;
-    padding: 6px 0;
+  .goals-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-weight: 700;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .goals [contenteditable] {
+    min-height: 58px;
     font-size: 0.86rem;
+    line-height: 1.65;
+    outline: none;
+    color: var(--ink);
+  }
+  .goals [contenteditable]:empty:before {
+    content: attr(data-placeholder);
+    color: var(--ink-soft);
+    opacity: 0.75;
+  }
+
+  /* ---------- Weekday header ---------- */
+  .day-head-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 5px;
+  }
+  .day-head-row .dh { text-align: center; }
+  .dh .sm-day { display: block; color: var(--lagoon); font-weight: 700; font-size: 0.66rem; }
+  .dh .en-day { display: block; text-transform: uppercase; letter-spacing: 0.03em; font-size: 0.56rem; color: var(--ink-soft); opacity: 0.9; }
+
+  /* ---------- Day grid (planner cells) ---------- */
+  .day-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+  .day-box {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 5px 5px 6px;
+    min-height: 68px;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+  }
+  .day-box.pad { border-color: transparent; background: transparent; }
+  .day-box.sunday { background: var(--sunday-tint); border-color: var(--coral-soft); }
+  .day-box .num {
+    font-size: 0.72rem;
+    font-weight: 700;
     font-variant-numeric: tabular-nums;
     color: var(--ink);
   }
-  table.cal td.pad { color: transparent; }
-  table.cal td.sunday { color: var(--coral); font-weight: 700; background: var(--sunday-tint); border-radius: 8px; }
+  .day-box.sunday .num { color: var(--coral); }
+  .day-box .holiday {
+    font-size: 0.5rem;
+    line-height: 1.25;
+    color: var(--coral);
+    font-weight: 700;
+    margin-top: 1px;
+  }
+  .day-box .note {
+    flex: 1;
+    margin-top: 4px;
+    padding-top: 3px;
+    border-top: 1px dashed var(--line);
+    font-size: 0.62rem;
+    line-height: 1.35;
+    outline: none;
+    color: var(--ink);
+    overflow: hidden;
+    word-break: break-word;
+  }
 
   .proverb {
-    margin-top: auto;
     border-top: 1px dashed var(--line);
     padding-top: 12px;
   }
@@ -243,6 +332,27 @@
     color: var(--ink-soft);
     font-size: 0.78rem;
   }
+
+  @media (max-width: 480px) {
+    .day-box { min-height: 56px; padding: 4px; }
+    .day-box .note { font-size: 0.56rem; }
+  }
+
+  /* ---------- Print ---------- */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .hero, .legend, .glossary, .page-foot, .print-btn { display: none; }
+    .month-grid { display: block; margin-top: 0; }
+    .card {
+      border: 1px solid #ccc;
+      border-radius: 0;
+      page-break-after: always;
+      break-inside: avoid;
+    }
+    .day-box, .goals, .fact { background: #fff !important; border-color: #ccc; }
+    .day-box.sunday { background: #fdf1e8 !important; }
+    .badge { background: #eee; }
+  }
 </style>
 
 <div class="wrap">
@@ -253,17 +363,18 @@
       <path d="M0 45 Q 50 20 100 45 T 200 45 T 300 45 T 400 45 T 500 45 T 600 45 V90 H0 Z" fill="rgba(255,255,255,0.10)"></path>
       <path d="M0 60 Q 50 35 100 60 T 200 60 T 300 60 T 400 60 T 500 60 T 600 60 V90 H0 Z" fill="rgba(255,255,255,0.16)"></path>
     </svg>
-    <p class="eyebrow">Kalena Fa&#8217;a-Samoa &middot; Samoan Nature Calendar</p>
+    <p class="eyebrow">Kalena Fa&#8217;a-Samoa &middot; Samoan Nature Planner</p>
     <h1>Kalena Samoa</h1>
     <p class="sm-title">O le tausaga 2027 &mdash; The Year 2027</p>
     <p class="lede">
-      Twelve months through the flowers, birds, waterfalls and beaches of Samoa &mdash;
-      paired with Samoan proverbs and everyday phrases (gagana Samoa) alongside their English meaning.
+      A month-by-month planner through the flowers, birds, waterfalls and beaches of Samoa &mdash;
+      with Samoan proverbs and everyday phrases (gagana Samoa) alongside their English meaning.
     </p>
     <div class="hero-note">
-      <span>&#9728;&#65039;</span>
-      <span><b>Aso S&#257;</b> (Sunday) is traditionally a sacred day of rest in Samoa &mdash; it is marked in coral on every month below.</span>
+      <div><span>&#9998;&#65039;</span><span>Click into any day or the goals box to type notes &mdash; they&#8217;re saved automatically in this browser.</span></div>
+      <div><span>&#9728;&#65039;</span><span><b>Aso S&#257;</b> (Sunday) is traditionally a sacred day of rest in Samoa &mdash; marked in coral throughout.</span></div>
     </div>
+    <button class="print-btn" type="button" id="printBtn">&#128424;&#65039; Print this planner</button>
   </section>
 
   <div class="legend" id="legend"></div>
@@ -279,12 +390,17 @@
       <div><b>Aso</b> &mdash; day</div>
       <div><b>M&#257;s&#237;na</b> &mdash; month / moon</div>
       <div><b>Tausaga</b> &mdash; year</div>
+      <div><b>Sini</b> &mdash; goal</div>
+      <div><b>Malolo</b> &mdash; rest / holiday</div>
       <div><b>Fa&#8217;a Samoa</b> &mdash; the Samoan way of life</div>
       <div><b>&#8216;&#333;ina</b> (okina, &#8216;) &mdash; a glottal-stop letter unique to Samoan spelling</div>
     </div>
   </section>
 
-  <footer class="page-foot">Illustrations are original stylised artwork inspired by Samoa&#8217;s teuila, manumea, waterfalls and lagoons.</footer>
+  <footer class="page-foot">
+    Illustrations are original stylised artwork inspired by Samoa&#8217;s teuila, manumea, waterfalls and lagoons.
+    Notes you type are stored only on this device/browser &mdash; they are not shared or synced anywhere.
+  </footer>
 </div>
 
 <svg width="0" height="0" style="position:absolute">
@@ -332,6 +448,7 @@
 <script>
 (function () {
   var YEAR = 2027;
+  var STORAGE_PREFIX = "kalena-samoa-2027:";
 
   var THEME_LABEL = {
     flower:    { en: "Flower",    sm: "Fugala&#8216;au" },
@@ -341,13 +458,13 @@
   };
 
   var WEEKDAYS = [
-    { en: "Su", sm: "S&#257;",  sunday: true  },
-    { en: "Mo", sm: "Gaf",  sunday: false },
-    { en: "Tu", sm: "Lua",  sunday: false },
-    { en: "We", sm: "Lul",  sunday: false },
-    { en: "Th", sm: "Tof",  sunday: false },
-    { en: "Fr", sm: "Far",  sunday: false },
-    { en: "Sa", sm: "T&#333;o", sunday: false }
+    { en: "Su", sm: "S&#257;" },
+    { en: "Mo", sm: "Gaf" },
+    { en: "Tu", sm: "Lua" },
+    { en: "We", sm: "Lul" },
+    { en: "Th", sm: "Tof" },
+    { en: "Fr", sm: "Far" },
+    { en: "Sa", sm: "T&#333;o" }
   ];
 
   var MONTHS = [
@@ -401,8 +518,53 @@
       pSm:"Ia manuia le Kirisimasi ma le Tausaga Fou.", pEn:"Merry Christmas and Happy New Year." }
   ];
 
+  var HOLIDAYS_FIXED = [
+    { m: 0,  d: 1,  en: "New Year's Day",   sm: "Aso Fa&#8217;aletausaga Fou" },
+    { m: 0,  d: 2,  en: "New Year Holiday",  sm: "Aso Malolo" },
+    { m: 2,  d: 26, en: "Good Friday",       sm: "Aso Faraile Lelei" },
+    { m: 2,  d: 29, en: "Easter Monday",     sm: "Aso Gafua o le Eseta" },
+    { m: 5,  d: 1,  en: "Independence Day",  sm: "Aso Fa&#8217;aSaoloto" },
+    { m: 11, d: 25, en: "Christmas Day",     sm: "Aso Kirisimasi" },
+    { m: 11, d: 26, en: "Boxing Day",        sm: "Aso Malolo o Kirisimasi" }
+  ];
+
   function daysInMonth(m) { return new Date(YEAR, m + 1, 0).getDate(); }
   function firstWeekday(m) { return new Date(YEAR, m, 1).getDay(); }
+  function pad2(n) { return n < 10 ? "0" + n : "" + n; }
+
+  function addHoliday(map, m, d, en, sm) {
+    var key = m + "-" + d;
+    if (!map[key]) map[key] = [];
+    map[key].push({ en: en, sm: sm });
+  }
+
+  function buildHolidayMap() {
+    var map = {};
+    HOLIDAYS_FIXED.forEach(function (h) { addHoliday(map, h.m, h.d, h.en, h.sm); });
+
+    // White Sunday: second Sunday of October (a major Samoan children's holiday)
+    var d = new Date(YEAR, 9, 1);
+    var sundays = [];
+    while (d.getMonth() === 9) {
+      if (d.getDay() === 0) sundays.push(new Date(d));
+      d.setDate(d.getDate() + 1);
+    }
+    var whiteSunday = sundays[1];
+    if (whiteSunday) {
+      addHoliday(map, whiteSunday.getMonth(), whiteSunday.getDate(), "White Sunday", "Lotu a Tamaiti");
+      var whiteMonday = new Date(whiteSunday);
+      whiteMonday.setDate(whiteMonday.getDate() + 1);
+      addHoliday(map, whiteMonday.getMonth(), whiteMonday.getDate(), "White Monday", "Aso Gafua Pa&#8217;epa&#8217;e");
+    }
+    return map;
+  }
+
+  function safeGet(key) {
+    try { return localStorage.getItem(STORAGE_PREFIX + key); } catch (e) { return null; }
+  }
+  function safeSet(key, val) {
+    try { localStorage.setItem(STORAGE_PREFIX + key, val); } catch (e) {}
+  }
 
   function buildLegend() {
     var el = document.getElementById("legend");
@@ -415,62 +577,116 @@
         '<span><b>' + t.sm + '</b> &middot; ' + t.en + '</span>';
       el.appendChild(item);
     });
+    var holidayItem = document.createElement("div");
+    holidayItem.className = "legend-item";
+    holidayItem.innerHTML =
+      '<span class="dot"><span></span></span>' +
+      '<span><b>Aso Malolo</b> &middot; Public Holiday</span>';
+    el.appendChild(holidayItem);
   }
 
-  function buildCalendarTable(monthIndex) {
-    var table = document.createElement("table");
-    table.className = "cal";
-
-    var thead = document.createElement("thead");
-    var headRow = document.createElement("tr");
+  function buildDayHeadRow() {
+    var row = document.createElement("div");
+    row.className = "day-head-row";
     WEEKDAYS.forEach(function (d) {
-      var th = document.createElement("th");
-      th.innerHTML = '<span class="sm-day">' + d.sm + '</span><span class="en-day">' + d.en + '</span>';
-      headRow.appendChild(th);
+      var el = document.createElement("div");
+      el.className = "dh";
+      el.innerHTML = '<span class="sm-day">' + d.sm + '</span><span class="en-day">' + d.en + '</span>';
+      row.appendChild(el);
     });
-    thead.appendChild(headRow);
-    table.appendChild(thead);
+    return row;
+  }
 
-    var tbody = document.createElement("tbody");
+  function buildDayGrid(monthIndex, holidayMap) {
+    var wrap = document.createElement("div");
+    wrap.appendChild(buildDayHeadRow());
+
+    var grid = document.createElement("div");
+    grid.className = "day-grid";
+
     var total = daysInMonth(monthIndex);
     var start = firstWeekday(monthIndex);
-    var day = 1;
-    var row = document.createElement("tr");
 
     for (var i = 0; i < start; i++) {
-      var pad = document.createElement("td");
-      pad.className = "pad";
-      pad.textContent = "0";
-      row.appendChild(pad);
+      var lead = document.createElement("div");
+      lead.className = "day-box pad";
+      grid.appendChild(lead);
     }
 
-    var col = start;
-    while (day <= total) {
-      if (col === 7) {
-        tbody.appendChild(row);
-        row = document.createElement("tr");
-        col = 0;
+    for (var day = 1; day <= total; day++) {
+      var col = (start + day - 1) % 7;
+      var box = document.createElement("div");
+      box.className = "day-box" + (col === 0 ? " sunday" : "");
+
+      var num = document.createElement("div");
+      num.className = "num";
+      num.textContent = day;
+      box.appendChild(num);
+
+      var hs = holidayMap[monthIndex + "-" + day];
+      if (hs) {
+        hs.forEach(function (h) {
+          var tag = document.createElement("div");
+          tag.className = "holiday";
+          tag.title = h.en;
+          tag.innerHTML = h.sm;
+          box.appendChild(tag);
+        });
       }
-      var td = document.createElement("td");
-      if (col === 0) td.className = "sunday";
-      td.textContent = day;
-      row.appendChild(td);
-      day++;
-      col++;
+
+      var note = document.createElement("div");
+      note.className = "note";
+      note.contentEditable = "true";
+      note.setAttribute("role", "textbox");
+      note.setAttribute("aria-label", "Note for " + (monthIndex + 1) + "/" + day + "/" + YEAR);
+      var noteKey = "note:" + YEAR + "-" + pad2(monthIndex + 1) + "-" + pad2(day);
+      var savedNote = safeGet(noteKey);
+      if (savedNote) note.textContent = savedNote;
+      note.addEventListener("input", function () {
+        safeSet(this.getAttribute("data-key"), this.textContent);
+      });
+      note.setAttribute("data-key", noteKey);
+      box.appendChild(note);
+
+      grid.appendChild(box);
     }
-    while (col < 7 && col !== 0) {
-      var trailPad = document.createElement("td");
-      trailPad.className = "pad";
-      trailPad.textContent = "0";
-      row.appendChild(trailPad);
-      col++;
+
+    var totalCells = start + total;
+    var trailing = (7 - (totalCells % 7)) % 7;
+    for (var t = 0; t < trailing; t++) {
+      var trail = document.createElement("div");
+      trail.className = "day-box pad";
+      grid.appendChild(trail);
     }
-    tbody.appendChild(row);
-    table.appendChild(tbody);
-    return table;
+
+    wrap.appendChild(grid);
+    return wrap;
   }
 
-  function buildMonthCard(data, index) {
+  function buildGoals(monthIndex) {
+    var wrap = document.createElement("div");
+    wrap.className = "goals";
+
+    var label = document.createElement("div");
+    label.className = "goals-label";
+    label.innerHTML = "Sini o le M&#257;s&#237;na &middot; This Month&#8217;s Goals";
+    wrap.appendChild(label);
+
+    var box = document.createElement("div");
+    box.contentEditable = "true";
+    box.setAttribute("role", "textbox");
+    box.setAttribute("aria-multiline", "true");
+    box.setAttribute("data-placeholder", "Tusi mai au sini... / Write your goals & priorities...");
+    var key = "goals:" + monthIndex;
+    var saved = safeGet(key);
+    if (saved) box.textContent = saved;
+    box.addEventListener("input", function () { safeSet(key, this.textContent); });
+    wrap.appendChild(box);
+
+    return wrap;
+  }
+
+  function buildMonthCard(data, index, holidayMap) {
     var card = document.createElement("article");
     card.className = "card";
 
@@ -486,7 +702,8 @@
     fact.innerHTML = '<b>' + data.subject + '</b> (' + data.subjectSm + ') &mdash; ' + data.fact;
     card.appendChild(fact);
 
-    card.appendChild(buildCalendarTable(index));
+    card.appendChild(buildGoals(index));
+    card.appendChild(buildDayGrid(index, holidayMap));
 
     var proverb = document.createElement("div");
     proverb.className = "proverb";
@@ -499,11 +716,14 @@
   }
 
   function build() {
+    var holidayMap = buildHolidayMap();
     buildLegend();
     var grid = document.getElementById("monthGrid");
     MONTHS.forEach(function (m, i) {
-      grid.appendChild(buildMonthCard(m, i));
+      grid.appendChild(buildMonthCard(m, i, holidayMap));
     });
+    var printBtn = document.getElementById("printBtn");
+    if (printBtn) printBtn.addEventListener("click", function () { window.print(); });
   }
 
   build();
